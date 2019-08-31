@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include <algorithm>
 
 #include "cs225/PNG.h"
 #include "cs225/HSLAPixel.h"
@@ -62,6 +63,21 @@ PNG grayscale(PNG image) {
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
 
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+
+      HSLAPixel & pixel = image.getPixel(x, y);
+
+      int eucledian_distance = sqrt((centerX - x) * (centerX - x) + (centerY - y) * (centerY - y));
+
+      if (eucledian_distance < 160) {
+        pixel.l *= (1 - 0.005 * eucledian_distance);
+      } else {
+        pixel.l = 0.2 * pixel.l;
+      }
+    }
+  }
+
   return image;
   
 }
@@ -79,7 +95,25 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
 **/
 PNG illinify(PNG image) {
 
-  return image;
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+
+      HSLAPixel & pixel = image.getPixel(x, y);
+
+      double difference_from_blue = std::min(fabs(pixel.h - 216),fabs(pixel.h  - 360 - 216)); // hue for blue is 216
+      double difference_from_orange = std::min(fabs(pixel.h - 11),fabs(pixel.h - 360 - 11)); // hue for orange is 11
+
+      if (difference_from_blue > difference_from_orange) {
+        pixel.h = 11;
+      } else {
+        pixel.h = 216;
+      }
+
+    }
+  }
+
+return image;
+
 }
  
 
@@ -97,5 +131,26 @@ PNG illinify(PNG image) {
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
 
+  int x_to_consider = std::min(firstImage.width(), secondImage.width());
+  int y_to_consider = std::min(firstImage.height(), secondImage.height());
+
+  for (unsigned x = 0; x < x_to_consider; x++) {
+    for (unsigned y = 0; y < y_to_consider; y++) {
+
+      HSLAPixel & pixel_first_image = firstImage.getPixel(x, y);
+      HSLAPixel & pixel_second_image = secondImage.getPixel(x, y);
+
+      if (pixel_second_image.l == 1.0) {
+
+        if (pixel_first_image.l <= .8) {
+          pixel_first_image.l += 0.2;
+        } else {
+          pixel_first_image.l = 1.0;
+        }
+
+      }
+    }
+  }
+  
   return firstImage;
 }
