@@ -44,14 +44,15 @@ void Allocator::loadRooms(const std::string& file)
 {
     // Read in rooms
     fileio::loadRooms(file);
+    roomCount = fileio::getNumRooms(); //added roomCount =
     rooms = new Room[roomCount];
 
     totalCapacity = 0;
     int i = 0;
     while (fileio::areMoreRooms()) {
-        i++; 
         rooms[i] = fileio::nextRoom();
         totalCapacity += rooms[i].capacity;
+        i++;
     }
 }
 
@@ -117,4 +118,49 @@ Room* Allocator::largestOpening()
         }
     }
     return &rooms[index];
+}
+
+void Allocator::clear()
+{
+    if (alpha != NULL) {
+        delete[] alpha;
+    }
+    if (rooms != NULL) {
+        delete[] rooms;
+    }
+}
+
+void Allocator::copy(const Allocator& other) {
+    roomCount = other.roomCount;
+    studentCount =  other.studentCount;
+    totalCapacity = other.totalCapacity;
+
+    alpha = new Letter[26];
+    for (int i = 0; i < 26; i++) {
+        alpha[i].letter = 'A' + i;
+    }
+
+    rooms = new Room[roomCount];
+    for (int i = 0; i < roomCount; i++) {
+        rooms[i] = other.rooms[i];
+    }
+
+}
+
+Allocator::~Allocator() {
+    clear();
+}
+
+Allocator& Allocator::operator=(const Allocator& other)
+{
+    if (this != &other) {
+        clear();
+        copy(other);
+    }
+    return *this;
+}
+
+Allocator::Allocator(const Allocator& other)
+{
+    copy(other);
 }

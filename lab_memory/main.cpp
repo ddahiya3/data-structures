@@ -22,9 +22,9 @@ int main()
     std::cout << std::endl;
 
     fileio::init();
-    Allocator theAllocator("students.txt", "rooms.txt");
-    theAllocator.allocate();
-    theAllocator.printRooms();
+    Allocator *theAllocator = new Allocator("students.txt", "rooms.txt");
+    theAllocator->allocate();
+    theAllocator->printRooms();
     fileio::halt();
 
     std::cout << std::endl;

@@ -25,6 +25,23 @@ class Allocator
      */
     Allocator(const std::string& studentFile, const std::string& roomFile);
 
+    /**
+     * Allocator copy constructor.
+     * @param other The allocator to copy into this room.
+     */
+    Allocator(const Allocator& other); 
+
+    /**
+     * Allocator assignment operator.
+     * @param other The allocator to make a copy of
+     * @return A reference to the copied Room
+     */
+    Allocator& operator=(const Allocator& other);
+
+    /**
+     * Allocator destructor.
+     */
+    ~Allocator();
 
     /**
      * Calls the solving routine to allocate student letter
@@ -75,6 +92,16 @@ class Allocator
      * Return the room with the largest number of open seasts
      */
     Room* largestOpening();
+
+    /**
+     * Destructor/assignment operator clear helper function.
+     */
+    void clear();
+
+    /**
+     * Cctor/assignment operator copy helper function.
+     */
+    void copy(const Allocator& other);
 
     /**
      * Returns the amount of seats remaining in the room with the
