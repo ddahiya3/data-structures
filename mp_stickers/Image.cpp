@@ -257,7 +257,6 @@ HSLAPixel * newImageData = new HSLAPixel[new_width * new_height];
 void Image::scale(unsigned w, unsigned h) {
 
     double factor = 0;
-    std::cout<<"factor = "<<factor<<std::endl;
 
     if (w < width() || h < height()) {
         if ((double(w) / width()) < (double(h) /height())) {
