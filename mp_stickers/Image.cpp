@@ -256,23 +256,24 @@ HSLAPixel * newImageData = new HSLAPixel[new_width * new_height];
 
 void Image::scale(unsigned w, unsigned h) {
 
-    double factor;
+    double factor = 0;
+    std::cout<<"factor = "<<factor<<std::endl;
 
     if (w < width() || h < height()) {
-        if (std::min(w,h) == w) {
-            factor = w / width();
+        if ((double(w) / width()) < (double(h) /height())) {
+            factor = double(double(w) / width());
         } else {
-            factor = h / height();
+            factor = double(double(h) / height());
         }
-        scale(factor);
-        return;
+        
     } else {
-        if (std::min(w,h) == w) {
-            factor = width() / w;
+        if ((double(w) / width()) < (double(h) /height())) {
+            factor = double(double(w) / width());
         } else {
-            factor = height() / h;
+            factor = double(double(h) / height());
         }
-        scale(factor);
-        return;
     }
+
+    scale(factor);
+    
 }
