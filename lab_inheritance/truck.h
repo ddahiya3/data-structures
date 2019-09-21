@@ -27,6 +27,7 @@ class Truck : public Drawable
     void clear();
 
   public:
+    virtual void draw(cs225::PNG* canvas) const;
     Truck(const Vector2& center);
     Truck(const Truck& other);
     ~Truck();

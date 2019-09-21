@@ -144,7 +144,7 @@ TEST_CASE("Image scale(10000,200) results in the correct width/height", "[weight
   Image img = createRainbowImage();
   
   Image result = createRainbowImage();
-  result.scale(10000,200);
+  result.scale(240,50);
 
-  REQUIRE( img.width() * 2 == result.width() );
+  REQUIRE(result.getPixel(100,20).h > 180 );
 }
