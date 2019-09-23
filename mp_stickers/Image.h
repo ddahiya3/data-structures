@@ -12,6 +12,19 @@
 class Image : public cs225::PNG {
     public :
 
+    Image(Image const & other);
+    ~Image();
+    Image() : PNG() {}
+    
+    Image const & operator= (Image const & other) {
+        if (this != &other) {
+        PNG::operator=(other);
+        }
+        return *this;
+    }
+
+
+
     void lighten();
     void lighten(double amount);
 

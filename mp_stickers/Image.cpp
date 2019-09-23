@@ -276,3 +276,12 @@ void Image::scale(unsigned w, unsigned h) {
     scale(factor);
     
 }
+
+Image::Image(Image const & other) : PNG(other) {
+//
+}
+
+Image::~Image() {
+    //
+}
+

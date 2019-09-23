@@ -1,4 +1,4 @@
-/*
+
 #include "../cs225/catch/catch.hpp"
 #include "../Image.h"
 #include "../StickerSheet.h"
@@ -275,40 +275,49 @@ TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries work
   Image i;    i.readFromFile("tests/i.png");
 
   StickerSheet sheet(alma, 5);
-*/
+
   /**
    * For testing deep copy of base image
    * The {...} are used for a block statement
    * and are intentional
    */
-/*
-  {
+
+  /*{
     Image almaDuplicate = alma;
 
     StickerSheet sheetDuplicate(almaDuplicate, 5);
     sheet = sheetDuplicate;
   }
+  */
 
   sheet.addSticker(i, 800, 200);
+
   sheet.addSticker(i, 50, 500);
+
 
   sheet.changeMaxStickers(7);
   sheet.removeSticker(1);
   sheet.changeMaxStickers(4);
 
+
   const Image &renderXBound = sheet.render();
 
   REQUIRE( renderXBound.width() == i.width() + 800 );
   REQUIRE( renderXBound.height() == alma.height() );
+  
+  
+
 
   checkStickerPlacement(i, renderXBound, 800, 200);
 
   sheet.removeSticker(0);
 
   REQUIRE( sheet.render() == alma );
+  std::cout<<"reached";
 
   sheet.addSticker(i, 20, 500);
   sheet.changeMaxStickers(1);
+
 
   const Image &renderYBound = sheet.render();
 
@@ -316,6 +325,8 @@ TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries work
   REQUIRE( renderYBound.height() == i.height() + 500 );
 
   checkStickerPlacement(i, renderYBound, 20, 500);
+  
+
 
   sheet.removeSticker(0);
   sheet.changeMaxStickers(2);
@@ -325,6 +336,7 @@ TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries work
   sheet.addSticker(i, 800, 200);
   sheet.addSticker(i, 20, 500);
 
+
   const Image &renderXYBound = sheet.render();
 
   checkStickerPlacement(i, renderXYBound, 800, 200);
@@ -332,8 +344,9 @@ TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries work
 
   sheet.changeMaxStickers(0);
 
+
   REQUIRE( sheet.render() == alma );
 }
-*/
+
 
 
