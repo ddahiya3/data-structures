@@ -7,61 +7,25 @@ int main() {
   // Reminder:
   //   Before exiting main, save your creation to disk as myImage.png
   //
-Image alma; alma.readFromFile("tests/alma.png");
-Image i;    i.readFromFile("tests/i.png");
- StickerSheet sheet(alma, 5);
+  Image csgo; 
+  csgo.readFromFile("csgo.png");
+  csgo.scale(4);
 
-  /**
-   * For testing deep copy of base image
-   * The {...} are used for a block statement
-   * and are intentional
-   */
+  Image first;    
+  first.readFromFile("enderman.png");
 
-  /*{
-    Image almaDuplicate = alma;
+  Image first_s;
+  first_s.readFromFile("enderman.png");
+  first_s.illinify();
 
-    StickerSheet sheetDuplicate(almaDuplicate, 5);
-    sheet = sheetDuplicate;
-  }
-  */
-
-  sheet.addSticker(i, 800, 200);
-
-  sheet.addSticker(i, 50, 500);
-
-
-  sheet.changeMaxStickers(7);
-  sheet.removeSticker(1);
-  sheet.changeMaxStickers(4);
-
-
-  //const Image &renderXBound = sheet.render();
+  Image second;
+  second.readFromFile("creeper.png");
   
+  StickerSheet sheet(csgo, 5);
+  sheet.addSticker(first,20,50);
+  sheet.addSticker(second,800,350);
+  sheet.addSticker(first_s,1000,500);
 
-  //checkStickerPlacement(i, renderXBound, 800, 200);
-
-  sheet.removeSticker(0);
-
-  sheet.addSticker(i, 20, 500);
-  sheet.changeMaxStickers(1);
-
-
-  //const Image &renderYBound = sheet.render();
-
-  //checkStickerPlacement(i, renderYBound, 20, 500);
-  
-
-
-  sheet.removeSticker(0);
-  sheet.changeMaxStickers(2);
-
-  sheet.addSticker(i, 800, 200);
-  sheet.addSticker(i, 20, 500);
-
-
-  //const Image &renderXYBound = sheet.render();
-
-  sheet.changeMaxStickers(0);
 
   sheet.render().writeToFile("myImage.png");
 
