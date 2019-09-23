@@ -8,7 +8,8 @@
 #include "cs225/PNG.h"
 #include "cs225/HSLAPixel.h"
 
-struct image {
+class image {
+    public :
     Image image;
     unsigned x_coordinate;
     unsigned y_coordinate;

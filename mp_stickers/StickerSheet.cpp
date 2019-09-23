@@ -156,6 +156,10 @@ Image StickerSheet::render() const {
     Image *nw_base = new Image(base);
 
     //base is the base image
+    if (current_last_filled_index == -1 || length == 0) {
+        delete nw_base;
+        return base;
+    }
     for (int i = 0; i <= current_last_filled_index; i++) {
 
         if (images[i].x_coordinate + images[i].image.width() > nw_base->width() && images[i].y_coordinate + images[i].image.height() > nw_base->height()) {
