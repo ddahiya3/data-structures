@@ -19,6 +19,9 @@ namespace QuackFun
     template <typename T>
     T sum(stack<T>& s);
 
+    template <typename T>
+    T sum_helper(stack<T>& s,stack<T>& temp);
+
     bool isBalanced(queue<char> input);
 
     template <typename T>

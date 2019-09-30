@@ -22,8 +22,11 @@
  */
 int RecursionExercises::sumDigits(int n)
 {
+    if (n <= 9) {
+        return n;
+    } 
 
-    return -1;
+    return (n % 10) + sumDigits(n / 10);
 }
 
 /**
@@ -43,8 +46,13 @@ int RecursionExercises::sumDigits(int n)
  * @param rows The number of horizontal rows in the triangle
  * @return     The total number of blocks in the triangle pyramid
  */
-int RecursionExercises::triangle(int rows)
-{
+int RecursionExercises::triangle(int rows){ 
+    
+    if (rows <= 1) {
+        return rows;
+    }
 
-    return -1;
+    return rows + triangle(rows - 1);
 }
+
+

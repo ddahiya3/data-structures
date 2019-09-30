@@ -27,13 +27,31 @@ namespace QuackFun {
  *          stack in the same state (unchanged).
  */
 template <typename T>
-T sum(stack<T>& s)
-{
+T sum(stack<T>& s) {
+    T sum = T();
 
-    // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
-                // Note: T() is the default value for objects, and 0 for
-                // primitive types
+    stack<T> tempe;
+
+    sum = sum_helper(s,tempe);
+
+    return sum;
+}
+
+template <typename T>
+T sum_helper(stack<T>& s,stack<T>& temp) {
+
+    if (s.empty()) {
+        while(!temp.empty()) {
+            s.push(temp.top());
+            temp.pop();
+        }
+        return T();
+    }
+
+    temp.push(s.top());
+    s.pop();
+    
+    return temp.top() + sum_helper(s,temp);
 }
 
 /**
@@ -56,8 +74,39 @@ T sum(stack<T>& s)
 bool isBalanced(queue<char> input)
 {
 
+    stack<char> temp;
+
+    while(!input.empty()) {
+        if (input.front() == '[' || input.front() == ']') {
+            temp.push(input.front());
+        }
+        input.pop();
+    }
+
+    int left_open = 0;
+    int right_open = 0;
+
+    while(!temp.empty()) {
+
+        if (temp.top() == ']') {
+            left_open ++;
+            if (left_open < right_open) {
+                return false;
+            } 
+
+        } else if (temp.top() == '[') {
+            right_open++ ;
+        }
+        temp.pop();
+    }
+
+        if (left_open == right_open) {
+            return true;
+        } else {
+            return false;
+        }
+
     // @TODO: Make less optimistic
-    return true;
 }
 
 /**
