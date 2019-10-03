@@ -150,7 +150,37 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
  */
 template <typename T>
 void List<T>::waterfall() {
-  /// @todo Graded in MP3.1
+  ListNode * curr = head_;
+  
+  if (curr == NULL || length_ == 0) {
+    return;
+  }
+
+  ListNode * tailptr = tail_;
+  ListNode * toswitch;
+  ListNode * temp;
+
+  while(curr->next!= tailptr && curr->next->next != NULL) {
+
+    //get initial pointers
+    toswitch = curr->next;
+    temp = toswitch->next;
+
+    //set prev and next before removing
+    temp->prev = curr;
+    curr->next = temp;
+
+    //set tail and toswitch in proper places
+    tailptr->next = toswitch;
+    toswitch->prev = tailptr;
+    tailptr = toswitch;
+    toswitch->next = NULL;
+    
+    //move curr onto the next one
+    curr = curr->next;
+
+  }
+
 }
 
 /**
