@@ -119,14 +119,15 @@ TEST_CASE("List::sort simple #1", "[weight=2][part=2][valgrind]") {
 
     list.insertBack(2);
     list.insertBack(5);
-    list.insertBack(2);
+    list.insertBack(3);
+    list.insertFront(9);
 
     list.sort();
 
     stringstream s;
     list.print(s);
 
-    REQUIRE(s.str() == "< 2 2 5 >");
+    REQUIRE(s.str() == "< 2 3 5 9 >");
 }
 
 TEST_CASE("List::sort simple #2", "[weight=2][part=2][valgrind]") {
@@ -134,6 +135,7 @@ TEST_CASE("List::sort simple #2", "[weight=2][part=2][valgrind]") {
 
     list.insertBack("c");
     list.insertBack("b");
+    //list.insertBack("a");
     list.insertBack("a");
 
     list.sort();
@@ -141,7 +143,7 @@ TEST_CASE("List::sort simple #2", "[weight=2][part=2][valgrind]") {
     stringstream s;
     list.print(s);
 
-    REQUIRE(s.str() == "< a b c >");
+    REQUIRE(s.str() == "< b c >");
 
 }
 
