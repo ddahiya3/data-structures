@@ -330,7 +330,9 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   } else if (first == NULL) {
     return second;
   } 
-  
+
+  bool firstadd = true; 
+  ListNode * previous = NULL;
   ListNode * headptr = first;
   ListNode * tailptr = first;
   ListNode * currf = first;
@@ -345,15 +347,27 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       
     } else {
 
-      if (currf == first) {
+      if (currf == first && firstadd) {
         temp = currs;
         currs = currs->next;
         temp->next = headptr;
         temp->prev = NULL;
         headptr->prev = temp;
         headptr = temp;
+        previous = temp;
+        firstadd = false;
 
-      } else {
+      } else if (currf == first) {
+        temp = currs;
+        currs = currs->next;
+        temp->next = currf;
+        temp->prev = previous;
+        previous->next = temp;
+        currf->prev = temp;
+        previous = temp;
+      }
+        
+        else {
 
         temp = currs;
         currs = currs->next;
@@ -365,13 +379,10 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       }
 
       tailptr = currf;
-
-    }
     
-    
+   }
   }
-
-
+  
   while(currs != NULL) {
 
     temp = currs;
