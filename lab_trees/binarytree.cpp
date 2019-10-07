@@ -71,6 +71,22 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
     printLeftToRight(subRoot->right);
 }
 
+template <typename T>
+void BinaryTree<T>::mirror(Node* subRoot) {
+
+    if (subRoot == NULL) {
+        return;
+    }
+
+    mirror(subRoot->left);
+    mirror(subRoot->right);
+
+    Node* temp;
+    temp = subRoot->right;
+    subRoot->right = subRoot->left;
+    subRoot->left = temp;
+}
+
 /**
  * Flips the tree over a vertical axis, modifying the tree itself
  *  (not creating a flipped copy).
@@ -79,6 +95,7 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
 void BinaryTree<T>::mirror()
 {
     //your code here
+    mirror(root);
 }
 
 
@@ -91,8 +108,52 @@ void BinaryTree<T>::mirror()
 template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
+    if (root == NULL) {
+        return true;
+    }
+
+    std::stack<Node*> stck;
+    Node * curr = root;
+    bool firsttime = true;
+    int currelem , preve = INT_MIN;
+
+    while(!stck.empty() || curr != NULL) {
+        if (!stck.empty()) {
+            curr = stck.top();
+            currelem = curr->elem;
+            if (currelem >= preve && !firsttime) {
+                return false;
+            }
+            firsttime = false;
+            preve = currelem;
+            stck.pop();
+            curr = curr->right;
+        } else {
+            stck.push(curr);
+            curr = curr->left;
+        }
+    }
+    return true;
+
     // your code here
-    return false;
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(Node * subRoot) const {
+    BinaryTree<T>::Node * previous = NULL;
+    if (subRoot != NULL) {
+        if (!isOrderedRecursive(subRoot->left)) {
+            return false;
+        }
+        if (previous != NULL && subRoot->elem >= previous->elem) {
+            return false;
+        }
+
+        previous = subRoot;
+
+        return isOrderedRecursive(subRoot->right);
+    }
+    return true;
 }
 
 /**
@@ -105,7 +166,8 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
     // your code here
-    return false;
+    return isOrderedRecursive(root);
+
 }
 
 

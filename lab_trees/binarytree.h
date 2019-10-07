@@ -192,6 +192,12 @@ class BinaryTree
          */
         void printLeftToRight(const Node* subRoot) const;
 
+        void mirror(Node* subroot);
+
+        bool isOrderedRecursive(Node* subRoot) const;
+
+
+
 
 
 
