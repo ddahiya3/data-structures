@@ -15,30 +15,7 @@ using namespace cs225;
 
 
 TEST_CASE("List::reverse", "[weight=5][part=2]") {
-
-  List<int> list;
-  List<int> list2;
-
-    //list.insertFront(9);
-    //list.insertFront(8);
-    //list.insertFront(7);
-    //list.insertFront(6);
-    //list.insertFront(5);
-    //list.insertFront(4);
-    list.insertFront(3);
-    list2.insertFront(2);
-    //list2.insertFront(1);
-    list2.insertFront(1);
-
-    list.mergeWith(list2);
-
-    stringstream s;
-    list.print(s);
-
-    REQUIRE( "< 3 2 1 6 5 4 9 8 7 >" == s.str() );
-    
-   
-  /*PNG in;        in.readFromFile("tests/alma.png");
+  PNG in;        in.readFromFile("tests/alma.png");
   PNG expected;  expected.readFromFile("tests/expected-reverse.png");
 
   List<HSLAPixel> list = imageToList(in);
@@ -48,11 +25,7 @@ TEST_CASE("List::reverse", "[weight=5][part=2]") {
   INFO("Output image `out` saved as actual-reverse.png");
 
   REQUIRE( out == expected );
-  */
- 
-  
 }
-
 
 TEST_CASE("List::reverseNth #1", "[weight=5][part=2]") {
   PNG in;        in.readFromFile("tests/alma.png");
@@ -122,16 +95,14 @@ TEST_CASE("List::sort simple #1", "[weight=2][part=2][valgrind]") {
 
     list.insertBack(2);
     list.insertBack(5);
-    list.insertBack(3);
-    list.insertFront(9);
-    list.insertFront(1);
+    list.insertBack(2);
 
     list.sort();
 
     stringstream s;
     list.print(s);
 
-    REQUIRE(s.str() == "< 2 3 5 9 >");
+    REQUIRE(s.str() == "< 2 2 5 >");
 }
 
 TEST_CASE("List::sort simple #2", "[weight=2][part=2][valgrind]") {
@@ -140,14 +111,13 @@ TEST_CASE("List::sort simple #2", "[weight=2][part=2][valgrind]") {
     list.insertBack("c");
     list.insertBack("b");
     list.insertBack("a");
-    list.insertBack("a");
 
     list.sort();
 
     stringstream s;
     list.print(s);
 
-    REQUIRE(s.str() == "< b c >");
+    REQUIRE(s.str() == "< a b c >");
 
 }
 
