@@ -8,6 +8,8 @@
 #include <cmath>
 #include <list>
 #include <stack>
+#include <queue>
+#include <vector>
 
 #include "../cs225/PNG.h"
 #include "../Point.h"
@@ -35,4 +37,14 @@ public:
 private:
 	/** @todo [Part 1] */
 	/** add private members here*/
+  PNG image_;
+  double tolerance_;
+  Point start_;
+  std::stack<Point> stack_;
+  std::vector<std::vector<bool>> visited_before;
+  HSLAPixel startpoint;
+
+  bool check_visited(int x,int y);
+  
+
 };

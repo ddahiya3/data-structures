@@ -1,10 +1,11 @@
 #include <iterator>
 #include <cmath>
 
-#include <list>
+/*#include <list>
 #include <queue>
 #include <stack>
 #include <vector>
+*/
 
 #include "../cs225/PNG.h"
 #include "../Point.h"
@@ -24,6 +25,19 @@ using namespace cs225;
  */
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+  image_ = png;
+  start_ = start;
+  tolerance_ = tolerance;
+  queue_.push(start_);
+  startpoint = image_.getPixel(start_.x,start_.y);
+
+  visited_before.resize((int)image_.height(),std::vector<bool>((int)image_.width()));
+  for (int i = 0; i < (int)image_.height(); i++) {
+    for (int j = 0; j < (int)image_.width(); j++) {
+      visited_before[i][j] = false;
+    }
+  }
+
 }
 
 /**
@@ -31,7 +45,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return ImageTraversal::Iterator(this, start_);
 }
 
 /**
@@ -47,6 +61,22 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
+  if (point.x + 1 < image_.width() && calculateDelta(startpoint, image_.getPixel(point.x + 1, point.y)) < tolerance_ && !check_visited((int)point.x + 1, (int)point.y)) {
+		queue_.push(Point(point.x + 1, point.y));
+	}
+
+	if (point.y + 1 < image_.height() && calculateDelta(startpoint, image_.getPixel(point.x, point.y + 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y + 1)) {
+		queue_.push(Point(point.x, point.y + 1));
+	}
+
+	if ((int)(point.x - 1) >= 0 && calculateDelta(startpoint, image_.getPixel(point.x - 1, point.y)) < tolerance_ && !check_visited((int)point.x - 1, (int)point.y)) {
+		queue_.push(Point(point.x - 1, point.y));	
+	}
+
+	if ((int)(point.y - 1) >= 0 && calculateDelta(startpoint, image_.getPixel(point.x, point.y - 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y - 1)) {
+		queue_.push(Point(point.x, point.y - 1));
+	}
+  
 }
 
 /**
@@ -54,7 +84,14 @@ void BFS::add(const Point & point) {
  */
 Point BFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  Point toreturn = queue_.front();
+  queue_.pop();
+  while(check_visited((int)toreturn.x, (int)toreturn.y) && !queue_.empty()) {
+    toreturn = queue_.front();
+    queue_.pop();
+  }
+  visited_before[(int)toreturn.y][(int)toreturn.x] = true;
+  return toreturn;
 }
 
 /**
@@ -62,7 +99,7 @@ Point BFS::pop() {
  */
 Point BFS::peek() const {
   /** @todo [Part 1] */
-  return Point(0, 0);
+    return queue_.front();
 }
 
 /**
@@ -70,5 +107,9 @@ Point BFS::peek() const {
  */
 bool BFS::empty() const {
   /** @todo [Part 1] */
-  return true;
+  return queue_.empty();
+}
+
+bool BFS::check_visited(int x, int y) {
+  return visited_before[y][x];
 }

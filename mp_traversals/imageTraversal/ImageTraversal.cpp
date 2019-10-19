@@ -31,8 +31,13 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 /**
  * Default iterator constructor.
  */
-ImageTraversal::Iterator::Iterator() {
+ImageTraversal::Iterator::Iterator() : image_traversal_(NULL) {
   /** @todo [Part 1] */
+  
+}
+
+ImageTraversal::Iterator::Iterator(ImageTraversal * traversal, Point start) : image_traversal_(traversal) , start_point_(start) {
+  current_ = image_traversal_->peek();
 }
 
 /**
@@ -42,6 +47,11 @@ ImageTraversal::Iterator::Iterator() {
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
+  if (!image_traversal_->empty()) {
+    current_ = image_traversal_->pop();
+    image_traversal_->add(current_);
+    current_ = image_traversal_->peek();
+  }
   return *this;
 }
 
@@ -52,7 +62,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  return current_;
 }
 
 /**
@@ -62,6 +72,26 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return false;
+  /*
+  if (image_traversal_->empty() && !other.image_traversal_->empty()) {
+    return true;
+  } else if (!image_traversal_->empty() && other.image_traversal_->empty()) {
+    return true;
+  } else {
+    return image_traversal_ != other.image_traversal_;
+  }
+  */
+  bool thisEmpty = false; 
+	bool otherEmpty = false;
+
+	if (image_traversal_ == NULL) { thisEmpty = true; }
+	if (other.image_traversal_ == NULL) { otherEmpty = true; }
+				
+	if (!thisEmpty)  { thisEmpty = image_traversal_->empty(); }
+	if (!otherEmpty) { otherEmpty = other.image_traversal_->empty(); }
+			
+	if (thisEmpty && otherEmpty) return false; // both empty then the traversals are equal, return true
+	else if ((!thisEmpty)&&(!otherEmpty)) return (image_traversal_ != other.image_traversal_); //both not empty then compare the traversals
+	else return true; // one is empty while the other is not, return true
 }
 
