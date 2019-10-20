@@ -44,6 +44,7 @@ public:
     ImageTraversal * image_traversal_;
     Point start_point_;
     Point current_;
+    bool ended_;
 
   };
 
@@ -79,6 +80,8 @@ public:
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
+
+  virtual bool add_increases_size(Point point) = 0;
 
 public:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  

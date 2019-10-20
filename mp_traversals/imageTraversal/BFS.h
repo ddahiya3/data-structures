@@ -33,6 +33,8 @@ public:
   Point peek() const;
   bool empty() const;
 
+  bool add_increases_size(Point point);
+
 private:
   /** @todo [Part 1] */
   /** add private members here*/

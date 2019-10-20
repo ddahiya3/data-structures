@@ -59,11 +59,11 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
   /** @todo [Part 1] */
-  if (point.x + 1 < image_.width() && calculateDelta(startpoint, image_.getPixel(point.x + 1, point.y)) < tolerance_ && !check_visited((int)point.x + 1, (int)point.y)) {
+  if ((int)point.x + 1 < (int)image_.width() && calculateDelta(startpoint, image_.getPixel(point.x + 1, point.y)) < tolerance_ && !check_visited((int)point.x + 1, (int)point.y)) {
 		stack_.push(Point(point.x + 1, point.y));
 	}
 
-	if (point.y + 1 < image_.height() && calculateDelta(startpoint, image_.getPixel(point.x, point.y + 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y + 1)){
+	if ((int)point.y + 1 < (int)image_.height() && calculateDelta(startpoint, image_.getPixel(point.x, point.y + 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y + 1)){
 		stack_.push(Point(point.x, point.y + 1));
 	}
 
@@ -84,9 +84,13 @@ Point DFS::pop() {
   /** @todo [Part 1] */
   Point toreturn = stack_.top();
   stack_.pop();
-  while(check_visited((int)toreturn.x, (int)toreturn.y) && !stack_.empty()) {
-    toreturn = stack_.top();
-    stack_.pop();
+  visited_before[(int)toreturn.y][(int)toreturn.x] = true;
+  if(!stack_.empty()) {
+    Point tocheck = stack_.top();
+    while(check_visited((int)tocheck.x, (int)tocheck.y) && !stack_.empty()) {
+      tocheck = stack_.top();
+      stack_.pop();
+    }
   }
   visited_before[(int)toreturn.y][(int)toreturn.x] = true;
   return toreturn;
@@ -97,9 +101,10 @@ Point DFS::pop() {
  */
 Point DFS::peek() const {
   /** @todo [Part 1] */
-  if (empty()) {
+  /*if (empty()) {
     return Point(0,0);
   }
+  */
   return stack_.top();
 }
 
@@ -113,5 +118,41 @@ bool DFS::empty() const {
 
 bool DFS::check_visited(int x, int y) {
   return visited_before[y][x];
+}
+
+bool DFS::add_increases_size(Point point) {
+  if (point.x + 1 < image_.width() && calculateDelta(startpoint, image_.getPixel(point.x + 1, point.y)) < tolerance_ && !check_visited((int)point.x + 1, (int)point.y)) {
+		return true;
+	}
+
+	if (point.y + 1 < image_.height() && calculateDelta(startpoint, image_.getPixel(point.x, point.y + 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y + 1)) {
+		return true;
+	}
+
+	if ((int)(point.x - 1) >= 0 && calculateDelta(startpoint, image_.getPixel(point.x - 1, point.y)) < tolerance_ && !check_visited((int)point.x - 1, (int)point.y)) {
+		return true;	
+	}
+
+	if ((int)(point.y - 1) >= 0 && calculateDelta(startpoint, image_.getPixel(point.x, point.y - 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y - 1)) {
+		return true;
+	}
+
+  bool toreturn = false;
+  std::stack<Point> temp;
+
+  while(!stack_.empty()) {
+    temp.push(stack_.top());
+    if (!check_visited(peek().x,peek().y)) {
+      toreturn = true;
+    }
+    stack_.pop();
+  }
+
+  while(!temp.empty()) {
+    stack_.push(temp.top());
+    temp.pop();
+  }
+
+  return toreturn;
 }
 

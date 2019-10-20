@@ -86,11 +86,14 @@ Point BFS::pop() {
   /** @todo [Part 1] */
   Point toreturn = queue_.front();
   queue_.pop();
-  while(check_visited((int)toreturn.x, (int)toreturn.y) && !queue_.empty()) {
-    toreturn = queue_.front();
-    queue_.pop();
-  }
   visited_before[(int)toreturn.y][(int)toreturn.x] = true;
+  if(!queue_.empty()) {
+    Point tocheck = queue_.front();
+    while(check_visited((int)tocheck.x, (int)tocheck.y) && !queue_.empty()) {
+      tocheck = queue_.front();
+      queue_.pop();
+    }
+  }
   return toreturn;
 }
 
@@ -112,4 +115,40 @@ bool BFS::empty() const {
 
 bool BFS::check_visited(int x, int y) {
   return visited_before[y][x];
+}
+
+bool BFS::add_increases_size(Point point) {
+  if (point.x + 1 < image_.width() && calculateDelta(startpoint, image_.getPixel(point.x + 1, point.y)) < tolerance_ && !check_visited((int)point.x + 1, (int)point.y)) {
+		return true;
+	}
+
+	if (point.y + 1 < image_.height() && calculateDelta(startpoint, image_.getPixel(point.x, point.y + 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y + 1)) {
+		return true;
+	}
+
+	if ((int)(point.x - 1) >= 0 && calculateDelta(startpoint, image_.getPixel(point.x - 1, point.y)) < tolerance_ && !check_visited((int)point.x - 1, (int)point.y)) {
+		return true;	
+	}
+
+	if ((int)(point.y - 1) >= 0 && calculateDelta(startpoint, image_.getPixel(point.x, point.y - 1)) < tolerance_ && !check_visited((int)point.x, (int)point.y - 1)) {
+		return true;
+	}
+
+  bool toreturn = false;
+  std::queue<Point> temp;
+
+  while(!queue_.empty()) {
+    temp.push(queue_.front());
+    if (!check_visited(peek().x,peek().y)) {
+      toreturn = true;
+    }
+    queue_.pop();
+  }
+
+  while(!temp.empty()) {
+    queue_.push(temp.front());
+    temp.pop();
+  }
+
+  return toreturn;
 }
