@@ -158,8 +158,6 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
             /* no-child remove */
             delete subtree;
             subtree = NULL;
-            return;
-            //rebalance(subtree);
             // your code here
         } else if (subtree->left != NULL && subtree->right != NULL) {
             /* two-child remove */
@@ -185,7 +183,6 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
         
         
     }
-    subtree->height = std::max(heightOrNeg1(subtree->left), heightOrNeg1(subtree->right)) + 1;
-        rebalance(subtree);
-        // your code here
+    rebalance(subtree);
+    // your code here
 }
