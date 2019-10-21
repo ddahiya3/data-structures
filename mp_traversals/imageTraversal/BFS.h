@@ -33,8 +33,6 @@ public:
   Point peek() const;
   bool empty() const;
 
-  bool add_increases_size(Point point);
-
 private:
   /** @todo [Part 1] */
   /** add private members here*/
@@ -43,8 +41,5 @@ private:
   double tolerance_;
   Point start_;
   std::queue<Point> queue_;
-  std::vector<std::vector<bool>> visited_before;
-  HSLAPixel startpoint;
 
-  bool check_visited(int x,int y);
 };

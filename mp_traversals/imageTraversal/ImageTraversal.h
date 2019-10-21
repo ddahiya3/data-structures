@@ -4,6 +4,7 @@
 #pragma once
 
 #include <iterator>
+#include <vector>
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
@@ -29,11 +30,15 @@ public:
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
-    Iterator(ImageTraversal * traversal, Point start);
+    Iterator(ImageTraversal * traversal, Point start, double tolerance, PNG png);
 
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
+
+    bool check_visited(int x, int y);
+
+    bool add_satisfied(Point point);
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
@@ -44,7 +49,10 @@ public:
     ImageTraversal * image_traversal_;
     Point start_point_;
     Point current_;
+    PNG image_;
+    double tolerance_;
     bool ended_;
+    std::vector<std::vector<bool>> visited_before;
 
   };
 
@@ -81,8 +89,6 @@ public:
    */
   virtual bool empty() const = 0;
 
-  virtual bool add_increases_size(Point point) = 0;
-
-public:
+private:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
 };

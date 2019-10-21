@@ -48,7 +48,7 @@ TEST_CASE("Illini I - FloodFilledImage - DFS", "[weight=3][part=2]") {
   REQUIRE( lastFrame == expected );
 }
 
-TEST_CASE("Illini I - FloodFilledImage - BFS", "[weight=3][part=2]") {
+TEST_CASE("Illini I - FloodFilledImage - BFS", "[weight=3][part=2d]") {
   PNG png;      png.readFromFile("tests/i.png");
   PNG expected; expected.readFromFile("tests/i-rainbow-bfs.png");
   PNG expected2; expected2.readFromFile("tests/i-rainbow-bfs-2.png");

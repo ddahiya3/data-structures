@@ -37,9 +37,20 @@ ImageTraversal::Iterator::Iterator() : image_traversal_(NULL) {
   
 }
 
-ImageTraversal::Iterator::Iterator(ImageTraversal * traversal, Point start) : image_traversal_(traversal) , start_point_(start) {
+ImageTraversal::Iterator::Iterator(ImageTraversal * traversal, Point start, double tolerance, PNG png) : image_traversal_(traversal) , start_point_(start) {
+
   current_ = image_traversal_->peek();
   ended_ = false;
+  tolerance_ = tolerance;
+  image_ = png;
+
+  visited_before.resize((int)image_.height(),std::vector<bool>((int)image_.width()));
+  for (int i = 0; i < (int)image_.height(); i++) {
+    for (int j = 0; j < (int)image_.width(); j++) {
+      visited_before[i][j] = false;
+    }
+  }
+  visited_before[current_.y][current_.x] = true;
 }
 
 /**
@@ -49,6 +60,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * traversal, Point start) : im
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
+  /*
   if (!image_traversal_->empty()) {
     current_ = image_traversal_->pop();
     if (image_traversal_->add_increases_size(current_)) {
@@ -59,6 +71,49 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
     }
   }
   return *this;
+  */
+  if (add_satisfied(Point(current_.x + 1, current_.y))) {
+    image_traversal_->add(Point(current_.x + 1, current_.y));
+  }
+  if (add_satisfied(Point(current_.x, current_.y + 1))) {
+    image_traversal_->add(Point(current_.x, current_.y + 1));
+  } 
+  if (add_satisfied(Point(current_.x - 1, current_.y))) {
+    image_traversal_->add(Point(current_.x - 1, current_.y));
+  } 
+  if (add_satisfied(Point(current_.x, current_.y - 1))) {
+    image_traversal_->add(Point(current_.x, current_.y - 1));
+  }
+
+  if (image_traversal_->empty()) {
+    ended_ = true;
+    return *this;
+  }
+
+  Point cleanup_visited = image_traversal_->pop();
+  while (check_visited(cleanup_visited.x, cleanup_visited.y) && !ended_) {
+    if (image_traversal_->empty()) {
+      ended_ = true;
+    } else {
+    cleanup_visited = image_traversal_->pop();
+    }
+  }
+
+  if (!ended_) {
+    current_ = cleanup_visited;
+    visited_before[current_.y][current_.x] = true;
+  }
+
+  return *this;
+  
+}
+
+bool ImageTraversal::Iterator::check_visited(int x, int y) {
+  return visited_before[y][x];
+}
+
+bool ImageTraversal::Iterator::add_satisfied(Point point) {
+  return (point.x < image_.width()) && (point.x >= 0) && (point.y < image_.height()) && (point.y >= 0) && (calculateDelta(image_.getPixel(start_point_.x, start_point_.y), image_.getPixel(point.x, point.y)) < tolerance_);  
 }
 
 /**
