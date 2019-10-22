@@ -50,7 +50,7 @@ public:
     Point start_point_;
     Point current_;
     PNG image_;
-    double tolerance_;
+    double tolerance_; 
     bool ended_;
     std::vector<std::vector<bool>> visited_before;
 
