@@ -80,8 +80,22 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * Also, don't forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    elems += 1;
+    if (shouldResize()) {
+        resizeTable();
+    }
+
+    int current = hashes::hash(key, size);
+    while (should_probe[current]) {
+        current = (current + 1) % size;
+    }
+    if (table[current] == NULL) {
+
+        table[current] = new std::pair<K,V> (key, value);
+        should_probe[current] = true;
+
+    }
+
 }
 
 template <class K, class V>
@@ -90,6 +104,12 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+    int index = findIndex(key);
+    if (index != -1) {
+        delete table[index];
+        table[index] = NULL;
+        --elems;
+    }
 }
 
 template <class K, class V>
@@ -101,7 +121,17 @@ int LPHashTable<K, V>::findIndex(const K& key) const
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    int current = hashes::hash(key, size);
+    int run = 0;
+    for (int i = current; should_probe[current]; i = (i + 1) % size) {
+        if (table[i] != NULL && table[i]->first == key) {
+            return i;
+        } else if (run + 1 == (int)size) {
+            break;
+        } else {
+            run++;
+        }
+    }
     return -1;
 }
 
@@ -159,4 +189,32 @@ void LPHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    
+//copied dhhashtable resize_table :)
+    int resize_size = findPrime(size * 2);
+
+    std::pair<K,V> ** resized_table = new std::pair<K,V>*[resize_size];
+
+
+    delete [] should_probe;
+    should_probe = new bool[resize_size];
+    for (int i = 0; i < resize_size; i++ ) {
+        resized_table[i] = NULL;
+        should_probe[i] = false;
+    }
+
+    for (int i = 0; i < (int)size; i++) {
+        if (table[i] != NULL) {
+            int current = hashes::hash(table[i]->first, resize_size);
+            while(resized_table[current] != NULL) {
+                current = (current + 1) % resize_size;
+            }
+            resized_table[current] = table[i];
+            should_probe[current] = true;
+        }
+    }
+
+    delete [] table;
+    table = resized_table;
+    size = resize_size;
 }
