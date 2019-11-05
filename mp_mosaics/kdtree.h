@@ -259,6 +259,14 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+
+    std::vector<Point<Dim>> points_vect;
+    KDTreeNode * make_tree(int left, int right, int dim);
+    void quickSelect(int left, int right , int dim, int mid);
+    int partition_quickselect(int dim, int left, int right, int pivotIndex);
+    Point<Dim> findNearestNeighbor(const Point<Dim>& target, Point<Dim> currentBest, int startIndex, int endIndex, int dimension) const;
+                              
+
 };
 
 #include "kdtree.hpp"
