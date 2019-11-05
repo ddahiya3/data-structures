@@ -243,6 +243,11 @@ class KDTree
                    colored_out::enable_t enable_bold = colored_out::COUT,
                    int modWidth = -1) const;
 
+    /*size_t getSize() {
+      return size;
+    }
+    */
+
   private:
 
     /** Internal representation, root and size **/
@@ -259,13 +264,17 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
-    
+
     std::vector<Point<Dim>> points_vect;
     KDTreeNode * make_tree(int left, int right, int dim);
+
     void quickSelect(int left, int right , int dim, int mid);
     int partition_quickselect(int dim, int left, int right, int pivotIndex);
+
     Point<Dim> findNearestNeighbor(const Point<Dim>& target, Point<Dim> currentBest, int startIndex, int endIndex, int dimension) const;
-                              
+
+    void destroy(KDTreeNode * root);
+    KDTreeNode * copy(const KDTreeNode * root);            
 
 };
 

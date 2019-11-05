@@ -130,6 +130,8 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   /**
    * @todo Implement this function!
    */
+  root = copy(other.root);
+  size = other.size;
 }
 
 template <int Dim>
@@ -137,6 +139,13 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
+  if(this != &rhs) {
+
+    destroy(root);
+    root = copy(rhs.root);
+    size = rhs.size;
+
+  }
 
   return *this;
 }
@@ -146,6 +155,7 @@ KDTree<Dim>::~KDTree() {
   /**
    * @todo Implement this function!
    */
+  destroy(root);
 }
 
 template <int Dim>
@@ -209,6 +219,31 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, Point<Dim> 
       
   }
   return Point<Dim>();
+}
+
+template<int Dim>
+void KDTree<Dim>::destroy(KDTreeNode * root) {
+  if (root == NULL) {
+    return;
+  }
+
+  destroy(root->left);
+  destroy(root->right);
+  delete root;
+}
+
+template <int Dim>
+typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::copy(const KDTreeNode* root) {
+
+  if (root == NULL) {
+    return NULL;
+  } else {
+    KDTreeNode * node = new KDTreeNode(root->point);
+    node->left = copy(root->left);
+    node->right = copy(root->right);
+    return node;
+  }
+
 }
 
 

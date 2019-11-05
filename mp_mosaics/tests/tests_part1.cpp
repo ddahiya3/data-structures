@@ -68,6 +68,20 @@ TEST_CASE("KDTree::shouldReplace Tests", "[weight=1][part=1]") {
   vector<Point<3>> pts;
   KDTree<3> tree(pts);
 
+  vector<Point<3>> points;
+  points.reserve(4);
+  for (int i = 0; i < 4; i++) {
+      Point<3> p;
+      for (int j = 0; j < 3; j++)
+          p[j] = i;
+      points.push_back(p);
+  }
+
+  KDTree<3> tree2(points);
+  tree2.printTree(cout);
+  KDTree<3> tree3(tree2);
+  tree3.printTree(cout);
+
   Point<3> target(1, 3, 5);
   Point<3> currentBest1(1, 3, 2);
   Point<3> possibleBest1(2, 4, 4);
@@ -76,9 +90,14 @@ TEST_CASE("KDTree::shouldReplace Tests", "[weight=1][part=1]") {
   Point<3> currentBest3(0, 2, 4);
   Point<3> possibleBest3(2, 4, 6);
 
+  REQUIRE( tree2.getSize() == tree3.getSize());
   REQUIRE( tree.shouldReplace(target, currentBest1, possibleBest1) == true );
   REQUIRE( tree.shouldReplace(target, currentBest2, possibleBest2) == false );
   REQUIRE( tree.shouldReplace(target, currentBest3, possibleBest3) == false );  // operator<
+
+  tree = tree3;
+  tree.printTree(cout);
+  REQUIRE( tree.getSize() == tree3.getSize());
 }
 
 
