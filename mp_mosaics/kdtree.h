@@ -243,10 +243,10 @@ class KDTree
                    colored_out::enable_t enable_bold = colored_out::COUT,
                    int modWidth = -1) const;
 
-    /*size_t getSize() {
+    size_t getSize() {
       return size;
     }
-    */
+  
 
   private:
 
