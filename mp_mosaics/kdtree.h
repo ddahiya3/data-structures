@@ -259,7 +259,7 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
-
+    
     std::vector<Point<Dim>> points_vect;
     KDTreeNode * make_tree(int left, int right, int dim);
     void quickSelect(int left, int right , int dim, int mid);

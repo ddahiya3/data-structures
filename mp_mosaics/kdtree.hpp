@@ -34,8 +34,8 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
     /**
      * @todo Implement this function!
      */
-    int current_distance = 0;
-    int potential_distance = 0;
+    double current_distance = 0;
+    double potential_distance = 0;
 
     for (int i = 0; i < Dim; i++) {
       current_distance += ((currentBest[i] - target[i]) * (currentBest[i] - target[i]));
@@ -193,8 +193,8 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, Point<Dim> 
         currentBest = points_vect[mid];
       }
 
-      int current_distance = 0;
-      int potential_distance = 0;
+      double current_distance = 0;
+      double potential_distance = 0;
 
       for (int i = 0; i < Dim; i++) {
         current_distance += ((currentBest[i] - query[i]) * (currentBest[i] - query[i]));
