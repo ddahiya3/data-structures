@@ -287,9 +287,9 @@ TEST_CASE("KDTree::findNearestNeighbor (2D), testing correct path", "[weight=1][
 }
 
 
-/*
 
-*/
+
+
 TEST_CASE("KDTree::findNearestNeighbor (2D), testing correct path with fence jumping", "[weight=1][part=1]") {
   double coords[20][2] = {{84, 44},  // mine
                           {74, 0},   // mine
@@ -339,6 +339,7 @@ TEST_CASE("KDTree::findNearestNeighbor (2D), testing correct path with fence jum
 
   REQUIRE(tree.findNearestNeighbor(target) == expected);
 }
+
 
 
 TEST_CASE("KDTree::findNearestNeighbor (3D), testing tie-breaking", "[weight=1][part=1]") {

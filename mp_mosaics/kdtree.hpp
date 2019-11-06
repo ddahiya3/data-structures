@@ -164,11 +164,9 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     /**
      * @todo Implement this function!
      */
-    if (points_vect.empty()) {
-        return Point<Dim>();
-    }
-    int mid = (points_vect.size() - 1) / 2;
-    return findNearestNeighbor(query, points_vect[mid], 0, points_vect.size() - 1, 0);
+    int mid_current_best = (points_vect.size() - 1) / 2;
+    //return neighborHelper(query, root, 0);
+    return findNearestNeighbor(query, points_vect[mid_current_best], 0, points_vect.size() - 1, 0);
 }
 
 template <int Dim>
@@ -177,30 +175,27 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, Point<Dim> 
   if (left > right) {
     return currentBest;
   } else if (left == right) {
-      if (shouldReplace(query, currentBest, points_vect[left])) {
-        currentBest = points_vect[left];
+      if (shouldReplace(query, currentBest, points_vect[right])) {
+        currentBest = points_vect[right];
       }
       return currentBest;
   } else {
+    //split into half
       int mid = (left + right) / 2;
-      int lefttree1, lefttree2, righttree1, righttree2;
+      int dim = (dimension + 1) % Dim; //dimension for next call
+      bool smallerdimval = true;
 
       if (!(smallerDimVal(query, points_vect[mid], dimension))) {
-        lefttree1 = mid + 1;
-        lefttree2 = left;
-        righttree2 = mid - 1;
-        righttree1 = right;
+        currentBest = findNearestNeighbor(query, currentBest, mid + 1, right, dim);
+        smallerdimval = false;
+        if (shouldReplace(query, currentBest, points_vect[mid])) {
+          currentBest = points_vect[mid];
+        }
       } else {
-        lefttree2 = mid + 1;
-        lefttree1 = left;
-        righttree1 = mid - 1;
-        righttree2 = right;
-      }
-
-      int dim = (dimension + 1) % Dim;
-      currentBest = findNearestNeighbor(query, currentBest, lefttree1, righttree1, dim);
-      if (shouldReplace(query, currentBest, points_vect[mid])) {
-        currentBest = points_vect[mid];
+        currentBest = findNearestNeighbor(query, currentBest, left, mid - 1, dim);
+        if (shouldReplace(query, currentBest, points_vect[mid])) {
+          currentBest = points_vect[mid];
+        }
       }
 
       double current_distance = 0;
@@ -210,9 +205,23 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, Point<Dim> 
         current_distance += ((currentBest[i] - query[i]) * (currentBest[i] - query[i]));
       }   
       potential_distance = (points_vect[mid][dimension] - query[dimension]) * (points_vect[mid][dimension] - query[dimension]);
-        
-      if ((current_distance == potential_distance && points_vect[mid] < currentBest) || (potential_distance < current_distance)) {
-        return findNearestNeighbor(query, currentBest, lefttree2, righttree2, dim);
+      //other side 
+      if (potential_distance < current_distance) {
+        if (smallerdimval) {
+          return findNearestNeighbor(query, currentBest, mid + 1, right, dim);
+        } else {
+          return findNearestNeighbor(query, currentBest, left, mid - 1, dim);
+        } 
+      } else if (current_distance == potential_distance) {
+        if (points_vect[mid] < currentBest) {
+          if (smallerdimval) {
+          return findNearestNeighbor(query, currentBest, mid + 1, right, dim);
+          } else {
+          return findNearestNeighbor(query, currentBest, left, mid - 1, dim);
+          }
+        } else {
+          return currentBest;
+        }
       } else {
         return currentBest;
       }
@@ -220,6 +229,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query, Point<Dim> 
   }
   return Point<Dim>();
 }
+
 
 template<int Dim>
 void KDTree<Dim>::destroy(KDTreeNode * root) {
@@ -246,5 +256,52 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::copy(const KDTreeNode* root) {
 
 }
 
+/*
+template<int Dim>
+inline Point<Dim> KDTree<Dim>::neighborHelper(const Point<Dim>& target, KDTreeNode* current, int currentDimension) const
+{
+	bool went_left = 0;
+	if (current->point == target) {
+		return current->point;
+	}
+	//basecase
+	if (current->right == NULL && current->left == NULL) {
+		return current->point;
+	}
+	//step to next point down to get currbest
+	Point<Dim> currentBest;
+	if (smallerDimVal(target, current->point, currentDimension)) {
+		currentBest = neighborHelper(target, current->left, (currentDimension + 1) % Dim);
+		went_left = true;
+	}
+	else {
+		currentBest = neighborHelper(target, current->right, (currentDimension + 1) % Dim);
+		went_left = false;
+	}
+	if (shouldReplace(target, currentBest, current->point)) {
+		currentBest = current->point;
+	}
+	double radius;
+	double currentDifference = 0;
+	for (int currentDim = 0; currentDim < Dim; currentDim++) {
+		currentDifference += (target[currentDim] - currentBest[currentDim]) * (target[currentDim] - currentBest[currentDim]);
+	}
+	radius = std::pow(currentDifference, .5);
+  
+	if (target[currentDimension] + radius > current->point[currentDimension] && went_left && current->right != NULL) {
+		Point<Dim> toAssess = neighborHelper(target, current->right, (currentDimension + 1) % Dim);
+		if (shouldReplace(target, currentBest, toAssess)) {
+			currentBest = toAssess;
+		}
+	}
+	else if (target[currentDimension] + radius > current->point[currentDimension] && current->left != NULL) {
+		Point<Dim> toAssess = neighborHelper(target, current->left, (currentDimension + 1) % Dim);
+		if (shouldReplace(target, currentBest, toAssess)) {
+			currentBest = toAssess;
+		}
+	}
+	return currentBest;
+}
 
+*/
 

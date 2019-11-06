@@ -272,7 +272,7 @@ class KDTree
     int partition_quickselect(int dim, int left, int right, int pivotIndex);
 
     Point<Dim> findNearestNeighbor(const Point<Dim>& target, Point<Dim> currentBest, int startIndex, int endIndex, int dimension) const;
-
+    //Point<Dim> neighborHelper(const Point<Dim>& target, KDTreeNode* current, int currentDimension) const;
     void destroy(KDTreeNode * root);
     KDTreeNode * copy(const KDTreeNode * root);            
 
