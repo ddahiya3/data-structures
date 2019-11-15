@@ -1,0 +1,1 @@
+Taking revenge on your sworn mortal-enemy is sweet indeed. Too bad for poor Gates locked in the closet though. Hopefully the janitor finds him tomorrow!

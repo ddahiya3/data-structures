@@ -1,0 +1,1 @@
+Apparantely throwing your resume in someone's face isn't the best way to get hired or act like a normal human being. Oops!
