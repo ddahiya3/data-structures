@@ -7,4 +7,7 @@ Approach him politely and ask him if he needs help with something as you can tel
 Whip your resume out of your bag and run headlong into him since you might not get this chance again!!
 
 # bill-gates-walk
-Walk past him making it seem like you didn't notice him since his presence exudes fear into you : a mere CS geek. 
+Walk past him making it seem like you didn't notice him since his presence exudes fear into you : a mere CS geek.
+
+# bill-gates-shout
+Shout out "Apple is better!" because why not?
