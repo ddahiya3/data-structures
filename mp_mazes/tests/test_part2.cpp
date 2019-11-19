@@ -1,5 +1,5 @@
 
-/**
+
 #include "../cs225/catch/catch.hpp"
 #include <iostream>
 #include <fstream>
@@ -156,6 +156,7 @@ TEST_CASE("testMakeSmallMaze", "[weight=10][part2]")
 	maze.makeMaze(2, 2);
 	assert_maze_tree(maze, 2, 2);
 }
+
 
 TEST_CASE("testMakeMazeConnected", "[weight=10][part2]")
 {
@@ -351,5 +352,5 @@ TEST_CASE("testDrawSolutionLarge", "[weight=10][part2][timeout=30000]")
 	REQUIRE(*actualOutput == solnImage);
 	delete actualOutput;
 }
- */
+
 
