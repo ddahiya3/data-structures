@@ -304,3 +304,5 @@ SquareMazeBlock::SquareMazeBlock()
 	downWall = true;
 	rightWall = true;
 }
+
+
