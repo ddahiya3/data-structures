@@ -26,6 +26,38 @@
  */
 NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
     /* Your code goes here! */
+
+    startingVertex_ = "p1-" + to_string(startingTokens);
+
+    for (int i = 0; i <= (int)startingTokens; i++) {
+
+      g_.insertVertex("p1-" + to_string(i));
+      g_.insertVertex("p2-" + to_string(i));
+
+      if (i > 1) {
+        
+        g_.insertEdge("p1-" + to_string(i), "p2-" + to_string(i - 1));
+        g_.setEdgeWeight("p1-" + to_string(i), "p2-" + to_string(i - 1), 0);
+
+        g_.insertEdge("p1-" + to_string(i), "p2-" + to_string(i - 2));
+        g_.setEdgeWeight("p1-" + to_string(i), "p2-" + to_string(i - 2), 0);
+
+        g_.insertEdge("p2-" + to_string(i), "p1-" + to_string(i - 1));
+        g_.setEdgeWeight("p2-" + to_string(i), "p1-" + to_string(i - 1), 0);
+
+        g_.insertEdge("p2-" + to_string(i), "p1-" + to_string(i - 2));
+        g_.setEdgeWeight("p2-" + to_string(i), "p1-" + to_string(i - 2), 0);
+
+      } else if (i == 1) {
+        
+        g_.insertEdge("p2-" + to_string(i),"p1-0");
+        g_.setEdgeWeight("p2-" + to_string(i),"p1-0", 0);
+
+        g_.insertEdge("p1-" + to_string(i),"p2-0");
+        g_.setEdgeWeight("p1-" + to_string(i),"p2-0", 0);
+
+      }
+    }
 }
 
 /**
@@ -40,6 +72,16 @@ NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
 std::vector<Edge> NimLearner::playRandomGame() const {
   vector<Edge> path;
  /* Your code goes here! */
+  Vertex curr = startingVertex_;
+
+  while (curr != "p1-0" && curr != "p2-0") {
+    std::vector<Vertex> adjlist = g_.getAdjacent(curr);
+    int rando = rand() % (int)adjlist.size();
+    Edge edge = g_.getEdge(curr, adjlist[rando]);
+    path.push_back(edge);
+    curr = adjlist[rando];
+  }
+
   return path;
 }
 
@@ -61,6 +103,17 @@ std::vector<Edge> NimLearner::playRandomGame() const {
  */
 void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
  /* Your code goes here! */
+  string loser = path[path.size() - 1].dest.substr(0,2);
+
+  for (int i = 0; i < (int)path.size(); i++) {
+    string curr = path[i].source.substr(0,2);
+    int weight = g_.getEdgeWeight(path[i].source, path[i].dest);
+    if (curr == loser) {
+      g_.setEdgeWeight(path.at(i).source, path[i].dest, weight - 1);
+    } else {
+      g_.setEdgeWeight(path.at(i).source, path[i].dest, weight + 1);
+    }
+  }
 }
 
 /**

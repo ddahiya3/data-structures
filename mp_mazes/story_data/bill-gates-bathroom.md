@@ -1,1 +1,0 @@
-You had to pee really badly and deicde to head to the bathroom. When you come out the man has disappeared and you go throught your life never knowing if the man really was who you thought him to be.

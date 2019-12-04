@@ -11,7 +11,7 @@
 template <class V, class E>
 unsigned int Graph<V,E>::numVertices() const {
   // TODO: Part 2
-  return 0;
+  return vertexMap.size();
 }
 
 

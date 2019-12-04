@@ -1,2 +1,0 @@
-His presence is too strong for a mere CS geek like you and thus you deicde to walk home without helping him. 
-But hey atleast you can say you saw Bill Gates in real life now! (Even though no one will ever believe you) :) 
