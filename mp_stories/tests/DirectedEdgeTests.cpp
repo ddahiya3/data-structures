@@ -115,3 +115,4 @@ TEST_CASE("Directed: Graph::removeVertex is correct", "[weight=1]") {
   REQUIRE( g.incidentEdges("c").size() == 3 );
   REQUIRE( g.incidentEdges("d").size() == 1 );
 }
+
