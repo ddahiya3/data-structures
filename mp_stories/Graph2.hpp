@@ -21,7 +21,56 @@ template <class V, class E>
 std::list<std::string> Graph<V,E>::shortestPath(const std::string start, const std::string end) {
   // TODO: Part 3
   std::list<std::string> path;
+  std::queue<std::string> queue;
+  std::unordered_map<std::string, bool> visited_before;
+  std::unordered_map<std::string, std::string> parent;
 
+  queue.push(start);
+  parent[start] = "first";
+  //std::cout<<"1 : "<<parent[start]<<" 2 : "<<start<<std::endl;
+  //std::cout<<"first :"<<start<<std::endl;
+  //std::cout<<"end :"<<end<<std::endl;
+
+  while(!queue.empty()) {
+
+    std::string temp = queue.front();
+    queue.pop();
+    visited_before[temp] = true;
+    //std::cout<<" z : "<<temp<<std::endl;
+
+    for (auto it : incidentEdges(temp)) {
+      if (it.get().source().key() == temp) {
+        if (visited_before.find(it.get().dest().key()) == visited_before.end()) {
+          queue.push(it.get().dest().key());
+          parent[it.get().dest().key()] = temp;
+          visited_before[it.get().dest().key()] = true;
+          //std::cout<<it.get().dest().key()<<" dest"<<std::endl;
+        }
+      } else {
+        if (visited_before.find(it.get().source().key()) == visited_before.end()) {
+          queue.push(it.get().source().key());
+          parent[it.get().source().key()] = temp;;
+          visited_before[it.get().source().key()] = true;
+          //std::cout<<it.get().source().key()<<" source"<<std::endl;
+        }
+      }
+    }
+  }
+
+  std::string toput = end;
+  while (toput != "first") {
+    path.push_back(toput);
+    toput = parent[toput];
+  }
+  //path.push_back(start);
+  std::reverse(path.begin(), path.end());
+  
+
+ /*for (auto it : path) {
+   std::cout<<it<<" ";
+ }
+ //std::cout<<parent[start];
+ */
 
   return path;
 }
